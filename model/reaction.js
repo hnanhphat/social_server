@@ -3,6 +3,11 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 const reactionSchema = mongoose.Schema({
+  author: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: [true, "Author is required"],
+  },
   targetType: {
     type: String,
     required: [true, "Target type is required"],
@@ -10,7 +15,6 @@ const reactionSchema = mongoose.Schema({
   targetID: {
     type: mongoose.Schema.Types.ObjectId,
     required: [true, "Target ID is required"],
-    ref: "User" || "Review",
   },
   emoji: {
     type: Object,

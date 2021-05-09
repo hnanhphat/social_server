@@ -127,6 +127,12 @@ reviewController.deleteReview = async (req, res, next) => {
 
     const review = await Review.findByIdAndDelete(reviewId);
 
+    const blog = await Blog.findByIdAndUpdate(
+      reviewAuthor.blog,
+      { $inc: { reviewCount: -1 }, $pullAll: { reviews: [review] } },
+      { new: true }
+    );
+
     res.status(200).json({
       success: true,
       data: review,

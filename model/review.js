@@ -6,6 +6,7 @@ const reviewSchema = mongoose.Schema(
     reactions: {
       type: Object,
       required: [false],
+      ref: "Reaction",
       default: {
         like: 0,
         love: 0,
