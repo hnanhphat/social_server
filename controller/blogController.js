@@ -68,12 +68,17 @@ blogController.getListOfBlogs = async (req, res, next) => {
     const offset = (page - 1) * limit;
 
     // 5. Get blog based on query info
-    const blogs = await Blog.find(filter).skip(offset).limit(limit);
+    const blogs = await Blog.find(filter)
+      .sort({ ...sortBy, createdAt: -1 })
+      .skip(offset)
+      .limit(limit)
+      .populate("author");
 
     // 6. Send blogs + totalPages info
     res.status(200).json({
-      status: "Success",
+      success: true,
       data: { blogs: blogs, totalPages },
+      message: "Get list of blogs successful",
     });
   } catch (error) {
     res.status(400).json({

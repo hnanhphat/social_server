@@ -28,7 +28,8 @@ reviewController.getListOfReview = async (req, res, next) => {
       $and: [{ blog: req.params.id }, { ...filter }],
     })
       .skip(offset)
-      .limit(limit);
+      .limit(limit)
+      .populate("author");
 
     // 6. Send reviews + totalPages info
     res.status(200).json({
@@ -66,7 +67,10 @@ reviewController.createReview = async (req, res, next) => {
 
     const blog = await Blog.findByIdAndUpdate(
       blogId,
-      { $inc: { reviewCount: 1 }, $push: { reviews: reviews } },
+      {
+        $inc: { reviewCount: 1 },
+        $push: { reviews: reviews },
+      },
       { new: true }
     );
 

@@ -4,23 +4,18 @@ require("dotenv").config();
 const blogSchema = mongoose.Schema(
   {
     reactions: {
-      type: mongoose.Schema.Types.Array,
-      required: [false],
-      ref: "Reaction",
-      default: {
-        like: 0,
-        love: 0,
-        care: 0,
-        laugh: 0,
-        wow: 0,
-        sad: 0,
-        angry: 0,
-      },
+      like: { type: Number, default: 0 },
+      love: { type: Number, default: 0 },
+      care: { type: Number, default: 0 },
+      laugh: { type: Number, default: 0 },
+      wow: { type: Number, default: 0 },
+      sad: { type: Number, default: 0 },
+      angry: { type: Number, default: 0 },
     },
     images: {
-      type: Object,
+      type: String,
       required: [false],
-      default: [],
+      default: "",
     },
     reviewCount: {
       type: Number,

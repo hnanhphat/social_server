@@ -23,12 +23,12 @@ authController.login = async (req, res, next) => {
     }
 
     // 4. Generate token
-    const token = await user.generateToken();
+    const accessToken = await user.generateToken();
 
     // 5. Response
     res.status(200).json({
       success: true,
-      data: { user: user, token },
+      data: { user: user, accessToken },
       message: "Login successful",
     });
   } catch (error) {

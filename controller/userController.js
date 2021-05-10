@@ -6,7 +6,7 @@ const userController = {};
 // Register
 userController.register = async (req, res, next) => {
   try {
-    const { avatarUrl, username, email, password } = req.body;
+    const { avatarUrl, name, email, password } = req.body;
     // Encode password first
     const salt = await bcrypt.genSalt(10);
     const encodedPassword = await bcrypt.hash(password, salt);
@@ -14,7 +14,7 @@ userController.register = async (req, res, next) => {
     // And save encode password
     const user = new User({
       avatarUrl: avatarUrl,
-      username: username,
+      name: name,
       email: email,
       password: encodedPassword,
     });
@@ -97,7 +97,7 @@ userController.updateProfile = async (req, res, next) => {
       throw new Error("User not found");
     }
 
-    const { avatarUrl, username, email, password } = req.body;
+    const { avatarUrl, name, email, password } = req.body;
     // Encode password first
     const salt = await bcrypt.genSalt(10);
     const encodedPassword = await bcrypt.hash(password, salt);
@@ -107,7 +107,7 @@ userController.updateProfile = async (req, res, next) => {
       userId,
       {
         avatarUrl: avatarUrl,
-        username: username,
+        name: name,
         email: email,
         password: encodedPassword,
       },

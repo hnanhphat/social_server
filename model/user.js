@@ -11,7 +11,8 @@ const userSchema = mongoose.Schema(
       default: "",
     },
     friendCount: { type: Number, required: [false], default: 0 },
-    username: {
+    friendship: { type: String, required: false, default: "" },
+    name: {
       type: String,
       required: [true, "Username is required"],
       trim: true,

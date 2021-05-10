@@ -10,7 +10,7 @@ const userApi = require("./user.api");
 
 router.use("/auth", authApi);
 router.use("/blogs", blogApi);
-// router.use("/friendship", friendshipApi);
+router.use("/friends", friendshipApi);
 router.use("/reactions", reactionApi);
 router.use("/reviews", reviewApi);
 router.use("/users", userApi);
