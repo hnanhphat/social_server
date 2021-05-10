@@ -35,7 +35,7 @@ fake.createUserDatabase = async () => {
     const userId = user._id;
 
     const blog = new Blog({
-      image: faker.image.cats(),
+      images: `${faker.image.animals()}?random=${Date.now()}`,
       title: faker.name.jobTitle(),
       content: faker.lorem.paragraph(),
       author: userId,

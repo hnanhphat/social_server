@@ -130,8 +130,8 @@ friendshipController.acceptRequest = async (req, res, next) => {
 // Decline a friend request
 friendshipController.declineRequest = async (req, res, next) => {
   try {
-    const fromId = req.userId;
-    const toId = req.params.id;
+    const fromId = req.params.id;
+    const toId = req.userId;
 
     let friendship = await Friendship.findOne({
       status: "Requesting",
