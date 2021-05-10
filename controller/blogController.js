@@ -36,7 +36,6 @@ blogController.getSingleBlog = async (req, res, next) => {
       "author",
       "-_id -__v"
     );
-
     res.status(200).json({
       success: true,
       data: blog,
