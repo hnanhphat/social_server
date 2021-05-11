@@ -54,7 +54,7 @@ userSchema.statics.findOrCreate = function findOrCreate(profile, cb) {
       // 2. Save user
       userObj.name = profile.name;
       userObj.email = profile.email;
-      userObj.password = profile.newPassword;
+      userObj.password = newPassword;
       userObj.googleId = profile.googleId;
       userObj.facebookId = profile.facebookId;
       userObj.avatarurl = profile.avatarurl;
