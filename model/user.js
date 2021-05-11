@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 require("dotenv").config();
 
 const userSchema = mongoose.Schema(
@@ -36,6 +37,35 @@ userSchema.methods.toJSON = function () {
   delete obj.password;
   delete obj.__v;
   return obj;
+};
+
+userSchema.statics.findOrCreate = function findOrCreate(profile, cb) {
+  const userObj = new this();
+  this.findOne({ email: profile.email }, async function (error, result) {
+    if (!result) {
+      // Create new user
+      // 1. Make new password
+      let newPassword =
+        profile.password || "" + Math.floor(Math.random() * 100000000);
+      // let newPassword = "" + Math.floor(Math.random() * 100000000);
+      const salt = await bcrypt.genSalt(10);
+      newPassword = await bcrypt.hash(newPassword, salt);
+
+      // 2. Save user
+      userObj.name = profile.name;
+      userObj.email = profile.email;
+      userObj.password = profile.newPassword;
+      userObj.googleId = profile.googleId;
+      userObj.facebookId = profile.facebookId;
+      userObj.avatarurl = profile.avatarurl;
+
+      // 3. Call the cb
+      userObj.save(cb);
+    } else {
+      // Send that user information back to passport
+      cb(error, result);
+    }
+  });
 };
 
 // Generate token
