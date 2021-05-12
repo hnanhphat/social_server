@@ -10,10 +10,12 @@ authController.login = async (req, res, next) => {
     // 1. Get the email and password from body
     const { email, password } = req.body;
 
-    // 2. Check that email is exist in database
+    // 2. Check that email is exist in database and verified
     const user = await User.findOne({ email: email });
     if (!user) {
       throw new Error("This email is not exist");
+    } else if (!user.emailVerified) {
+      throw new Error("This email is not verified");
     }
 
     // 3. Check the password is match

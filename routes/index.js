@@ -7,6 +7,12 @@ const friendshipApi = require("./friendship.api");
 const reactionApi = require("./reaction.api");
 const reviewApi = require("./review.api");
 const userApi = require("./user.api");
+const email = require("../helpers/email");
+
+router.get("/test-email", (req, res) => {
+  email.sendTestEmail();
+  res.send("email sent");
+});
 
 router.use("/auth", authApi);
 router.use("/blogs", blogApi);

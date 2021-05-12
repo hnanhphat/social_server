@@ -1,5 +1,7 @@
 const User = require("../model/user");
 const bcrypt = require("bcrypt");
+const utilsHelper = require("../helpers/utils");
+const { emailHelper } = require("../helpers/email");
 
 const userController = {};
 
@@ -10,15 +12,32 @@ userController.register = async (req, res, next) => {
     // Encode password first
     const salt = await bcrypt.genSalt(10);
     const encodedPassword = await bcrypt.hash(password, salt);
+    const emailVerificationCode = utilsHelper.generateRandomHexString(20);
 
     // And save encode password
     const user = new User({
-      avatarUrl: avatarUrl,
-      name: name,
-      email: email,
+      avatarUrl,
+      name,
+      email,
       password: encodedPassword,
+      emailVerified: false,
+      emailVerificationCode,
     });
     await user.save();
+
+    // Time to send our email with verification code
+    const verificationURL = `${process.env.FRONTEND_URL}/verify/${emailVerificationCode}`;
+    const emailData = await emailHelper.renderEmailTemplate(
+      "verify_email",
+      { name, code: verificationURL },
+      email
+    );
+
+    if (emailData.error) {
+      throw new Error(emailData.error);
+    } else {
+      emailHelper.send(emailData);
+    }
 
     res.status(200).json({
       success: true,
@@ -118,6 +137,36 @@ userController.updateProfile = async (req, res, next) => {
       success: true,
       data: userUpdate,
       message: "Update Profile successfully",
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+// Verify email
+userController.verifyEmail = async (req, res, next) => {
+  try {
+    const { code } = req.body;
+    let user = await User.findOne({ emailVerificationCode: code });
+    if (!user) {
+      throw new Error("Invalid Email Verification Token");
+    }
+
+    user = await User.findByIdAndUpdate(
+      user._id,
+      { $set: { emailVerified: true }, $unset: { emailVerificationCode: 1 } },
+      { new: true }
+    );
+
+    const accessToken = await user.generateToken();
+
+    res.status(200).json({
+      success: true,
+      data: { user, accessToken },
+      message: "Verify Email Successfully",
     });
   } catch (error) {
     res.status(400).json({

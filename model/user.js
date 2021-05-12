@@ -28,6 +28,8 @@ const userSchema = mongoose.Schema(
     },
     password: { type: String, required: [true, "Password is required"] },
     isDelete: { type: Boolean, required: [false], default: false },
+    emailVerificationCode: { type: String, select: false },
+    emailVerified: { type: Boolean, require: true, default: false },
   },
   { timestamps: true }
 );

@@ -15,4 +15,7 @@ router.get("/", userController.getListOfUsers);
 // Update profile
 router.put("/", authMiddleware.loginRequired, userController.updateProfile);
 
+// Verify Email
+router.post("/verify_email", userController.verifyEmail);
+
 module.exports = router;
